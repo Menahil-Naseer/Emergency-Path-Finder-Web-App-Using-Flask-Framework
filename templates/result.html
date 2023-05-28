@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emergency Path Finder - Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            background-image: url('static/ambulance.jpg');
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            margin: 0 auto;
+            max-width: 1100px;
+            background-color: rgb(126,191,197);
+            border-radius: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            opacity: 0.97;
+            position: relative; /* Added position relative */
+        }
+        
+        .help-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .help-icon:hover {
+            background-color: #0056b3;
+        }
+        
+        .help-block {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 50px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 20px;
+            max-width: 300px;
+            z-index: 3;
+        }
+        
+        .help-block h3 {
+            color: #333;
+            margin-top: 0;
+        }
+
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        h2 {
+            color: #666;
+            margin-top: 30px;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+        
+        li {
+            margin-bottom: 5px;
+        }
+        
+        .hospital-name {
+            font-weight: bold;
+            color: #007BFF;
+        }
+        
+        .path-cost {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        
+        .content-wrapper {
+            display: flex;
+        }
+        
+        .text-content {
+            flex: 1;
+        }
+        
+        .graph-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            opacity: 0.99;
+        }
+        
+        .graph-card {
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.705);
+            padding: 5px;
+            width: 600px;
+            height: 600px;
+        }
+        
+        .graph-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .map-button {
+            display: block;
+            width: 300px;
+            height: 40px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            line-height: 40px;
+            text-decoration: none;
+        }
+        
+        .map-button:hover {
+            background-color: #0056b3;
+        }
+        
+    </style>
+
+    <script>
+    
+    function toggleHelp() {
+        const helpBlock = document.getElementById('helpBlock');
+        const helpIcon = document.getElementById('helpIcon');
+        const isHelpBlockVisible = helpBlock.style.display === 'block';
+
+        if (!isHelpBlockVisible) {
+            helpBlock.style.display = 'block';
+            helpIcon.style.backgroundColor = '#0056b3';
+        } else {
+            helpBlock.style.display = 'none';
+            helpIcon.style.backgroundColor = '#007bff';
+        }
+    }
+</script>
+
+
+</head>
+<body>
+    <div class="container">
+        <div class="help-icon" onmouseover="toggleHelp()" onmouseout="toggleHelp()">&#63;</div>
+      
+      <div id="helpBlock" class="help-block">
+          
+          <p>1. You can see the nearest hospital and it distance from your selected location on left side.</p>
+          <p>2. You can see through graph about the distance.</p>
+          <p>3. You can see the hospital location on google maps as well.</p>
+      </div>
+        <h1>Emergency Path Finder - Result</h1>
+        
+        <div class="content-wrapper">
+            <div class="text-content">
+                <h2>Nearest Hospital: <span class="hospital-name">{{ nearest_hospital }}</span></h2>
+                
+                <h2>Shortest Path:</h2>
+                <ul>
+                    {% for node, _ in path %}
+                        <li>{{ node }}</li>
+                    {% endfor %}
+                </ul>
+                
+                <h2 class="path-cost">Distance: <span class="hospital-name">{{ path_cost }} m or {{ path_cost/1000 }} km</span></h2>
+                <br><br>
+                
+                <a class="map-button" href="https://www.google.com/maps/search/?api=1&query={{ nearest_hospital }}" target="_blank">See location on Google Maps</a>
+            </div>
+            
+            <div class="graph-container">
+                <div class="graph-card">
+                    <img src="{{ url_for('static', filename='graph.png') }}" alt="Graph">
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

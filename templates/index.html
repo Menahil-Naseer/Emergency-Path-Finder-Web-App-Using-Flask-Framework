@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emergency Path Finder</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-image: url('static/ambulance.jpg');
+            margin: 0;
+            padding: 20px;
+            background-size: cover;
+            min-height: 100vh;
+            margin-top: 70px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .help-icon,
+        .contact-icon {
+            position: absolute;
+            top: 10px;
+            width: 30px;
+            height: 30px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .help-icon:hover,
+        .contact-icon:hover {
+            background-color: #0056b3;
+        }
+
+        .help-icon {
+            right: 50px;
+        }
+
+        .contact-icon {
+            right: 10px;
+        }
+
+        .help-block,
+        .contact-block {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 100px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 20px;
+            max-width: 300px;
+        }
+
+        .help-block h3,
+        .contact-block h3 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            opacity: 0.95;
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const message = "Welcome to the emergency service";
+
+            if ('speechSynthesis' in window) {
+                const speech = new SpeechSynthesisUtterance(message);
+                speech.lang = 'en-US';
+                speech.volume = 1;
+                speech.rate = 1;
+                speech.pitch = 1;
+                window.speechSynthesis.speak(speech);
+            } else {
+                console.error('Speech synthesis is not supported in your browser.');
+            }
+        });
+
+        function toggleHelp() {
+            const helpBlock = document.getElementById('helpBlock');
+            const helpIcon = document.getElementById('helpIcon');
+            const isHelpBlockVisible = helpBlock.style.display === 'block';
+
+            if (!isHelpBlockVisible) {
+                helpBlock.style.display = 'block';
+                helpIcon.style.backgroundColor = '#0056b3';
+            } else {
+                helpBlock.style.display = 'none';
+                helpIcon.style.backgroundColor = '#007bff';
+            }
+        }
+
+        function toggleContact() {
+            const contactBlock = document.getElementById('contactBlock');
+            const contactIcon = document.getElementById('contactIcon');
+            const isContactBlockVisible = contactBlock.style.display === 'block';
+
+            if (!isContactBlockVisible) {
+                contactBlock.style.display = 'block';
+                contactIcon.style.backgroundColor = '#0056b3';
+            } else {
+                contactBlock.style.display = 'none';
+                contactIcon.style.backgroundColor = '#007bff';
+            }
+        }
+
+        function sendEmail() {
+            window.location.href = 'mailto:fma@gmail.com';
+        }
+
+        function initiateCall() {
+            window.location.href = 'tel:0310466567778';
+        }
+    </script>
+</head>
+<body>
+    <h1>Emergency Path Finder</h1>
+
+    <div class="help-icon" id="helpIcon" onmouseover="toggleHelp()" onmouseout="toggleHelp()">&#63;</div>
+    <div class="contact-icon" id="contactIcon" onclick="toggleContact()">&#128222;</div>
+
+    <div id="helpBlock" class="help-block">
+        <h3>How to use the app:</h3>
+        <p>1. Select the emergency location or the location near to you from the dropdown list.</p>
+        <p>2. Click on the "Find Shortest Path" button.</p>
+        <p>3. The app will calculate and display the shortest path to the nearest hospital and also display a graph for you or you can view the hospital location from Google Maps as well.</p>
+    </div>
+
+    <div id="contactBlock" class="contact-block">
+        <h3>Contact Details:</h3>
+        <p>Email: <a href="mailto:fma@gmail.com" onclick="sendEmail()">fma@gmail.com</a></p>
+        <p>Phone: <a href="tel:0310466567778" onclick="initiateCall()">0310 466567778</a></p>
+    </div>
+
+    <form action="/find_path" method="POST">
+        <label for="emergency_location">Select Emergency Location:</label>
+        <select id="emergency_location" name="emergency_location">
+            <option value="Peoples colony chowk">People's Colony Chowk</option>
+            <option value="NADRA office attock">NADRA Office Attock</option>
+            <option value="Darul Islam Colony">Darul Islam Colony</option>
+            <option value="Attock City Police Station">Attock City Police Station</option>
+        </select>
+
+        <button type="submit">Find Shortest Path</button>
+    </form>
+</body>
+</html>
